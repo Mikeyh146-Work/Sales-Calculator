@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Target Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .row {
+            display: flex;
+            gap: 20px;
+        }
+        .column {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sales Target Calculator</h1>
+        <label for="weeklyTarget">Target (£):</label>
+        <input type="number" id="weeklyTarget" placeholder="Enter weekly target">
+
+        <div class="row">
+            <div class="column">
+                <h3>Friday Sales</h3>
+                <label for="fridayBuggies">Buggies Sold:</label>
+                <input type="number" id="fridayBuggies" placeholder="Enter buggies sold on Friday">
+
+                <label for="fridayBikes">Adult Bikes Sold:</label>
+                <input type="number" id="fridayBikes" placeholder="Enter bikes sold on Friday">
+
+                <label for="fridayTrailers">Trailers Sold:</label>
+                <input type="number" id="fridayTrailers" placeholder="Enter trailers sold on Friday">
+
+                <label for="fridayTags">Tagalongs Sold:</label>
+                <input type="number" id="fridayTags" placeholder="Enter tagalongs sold on Friday">
+            </div>
+
+            <div class="column">
+                <h3>Monday Sales</h3>
+                <label for="mondayBuggies">Buggies Sold:</label>
+                <input type="number" id="mondayBuggies" placeholder="Enter buggies sold on Monday">
+
+                <label for="mondayBikes">Adult Bikes Sold:</label>
+                <input type="number" id="mondayBikes" placeholder="Enter bikes sold on Monday">
+
+                <label for="mondayTrailers">Trailers Sold:</label>
+                <input type="number" id="mondayTrailers" placeholder="Enter trailers sold on Monday">
+
+                <label for="mondayTags">Tagalongs Sold:</label>
+                <input type="number" id="mondayTags" placeholder="Enter tagalongs sold on Monday">
+            </div>
+        </div>
+
+        <button onclick="calculateSales()">Calculate Sales Needed</button>
+
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        function calculateSales() {
+            const weeklyTarget = parseFloat(document.getElementById('weeklyTarget').value) || 0;
+
+            const fridayBuggies = parseInt(document.getElementById('fridayBuggies').value) || 0;
+            const fridayBikes = parseInt(document.getElementById('fridayBikes').value) || 0;
+            const fridayTrailers = parseInt(document.getElementById('fridayTrailers').value) || 0;
+            const fridayTags = parseInt(document.getElementById('fridayTags').value) || 0;
+
+            const mondayBuggies = parseInt(document.getElementById('mondayBuggies').value) || 0;
+            const mondayBikes = parseInt(document.getElementById('mondayBikes').value) || 0;
+            const mondayTrailers = parseInt(document.getElementById('mondayTrailers').value) || 0;
+            const mondayTags = parseInt(document.getElementById('mondayTags').value) || 0;
+
+            const buggyPriceWeekend = 120;
+            const bikePrice = 30;
+            const trailerPrice = 15;
+            const tagalongPrice = 18;
+
+            const totalRevenue = (fridayBuggies + mondayBuggies) * buggyPriceWeekend +
+                                 (fridayBikes + mondayBikes) * bikePrice +
+                                 (fridayTrailers + mondayTrailers) * trailerPrice +
+                                 (fridayTags + mondayTags) * tagalongPrice;
+
+            const remainingRevenue = weeklyTarget - totalRevenue;
+
+            let message;
+            if (remainingRevenue <= 0) {
+                message = `Target met! Total Revenue: £${totalRevenue.toFixed(2)}`;
+            } else {
+                const additionalBuggiesNeeded = Math.ceil(remainingRevenue / buggyPriceWeekend);
+                const additionalBikesNeeded = Math.ceil(remainingRevenue / bikePrice);
+                const additionalTrailersNeeded = Math.ceil(remainingRevenue / trailerPrice);
+                const additionalTagalongsNeeded = Math.ceil(remainingRevenue / tagalongPrice);
+
+                message = `Revenue Needed to Hit Target: £${remainingRevenue.toFixed(2)}<br>` +
+                          `Additional Buggies Needed: ${additionalBuggiesNeeded}<br>` +
+                          `Additional Bikes Needed: ${additionalBikesNeeded}<br>` +
+                          `Additional Trailers Needed: ${additionalTrailersNeeded}<br>` +
+                          `Additional Tagalongs Needed: ${additionalTagalongsNeeded}`;
+            }
+
+            document.getElementById('result').innerHTML = message;
+        }
+    </script>
+</body>
+</html>
